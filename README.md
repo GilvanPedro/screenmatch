@@ -25,7 +25,7 @@ Projeto de estudos em Programação Orientada a Objetos (POO) em Java, inspirado
 ```
 screenmatch/
 ├─ src/
-│  ├─ Principal.java
+│  ├─ br.com.alura.screenmatch.principal.Principal.java
 │  └─ br/com/alura/screenmatch/
 │     ├─ calculos/
 │     │  ├─ CalculadoraDeTempo.java
@@ -42,7 +42,7 @@ screenmatch/
 └─ README.md
 ```
 
-- `Principal.java` é o ponto de entrada da aplicação (`public static void main`).
+- `br.com.alura.screenmatch.principal.Principal.java` é o ponto de entrada da aplicação (`public static void main`).
 - Pacote `br.com.alura.screenmatch.modelos` contém os modelos de domínio: `Titulo`, `Filme`, `Serie` e `Episodio`.
 - Pacote `br.com.alura.screenmatch.calculos` contém utilitários e contratos: `CalculadoraDeTempo`, `FiltroRecomendacao` e a interface `Classificavel`.
 
@@ -52,7 +52,7 @@ screenmatch/
 
 1. Abra o diretório do projeto no IntelliJ (`File > Open...`).
 2. Garanta que o SDK do projeto esteja configurado para JDK 17 ou superior (Project Structure > Project SDK).
-3. Abra o arquivo `src/Principal.java` e clique no ícone de "play" ao lado do método `main` para executar.
+3. Abra o arquivo `src/br.com.alura.screenmatch.principal.Principal.java` e clique no ícone de "play" ao lado do método `main` para executar.
 
 ### Executar via terminal
 
@@ -66,11 +66,11 @@ mkdir -Force out
 javac -d out src\**\*.java
 
 # 3) Executar a classe principal (no pacote padrão)
-java -cp out Principal
+java -cp out br.com.alura.screenmatch.principal.Principal
 ```
 
 Observações:
-- O projeto utiliza a classe `Principal` no pacote padrão (sem declaração `package`), que importa classes dos pacotes `br.com.alura.screenmatch.*`.
+- O projeto utiliza a classe `br.com.alura.screenmatch.principal.Principal` no pacote padrão (sem declaração `package`), que importa classes dos pacotes `br.com.alura.screenmatch.*`.
 - O parâmetro `-d out` instrui o `javac` a gerar os `.class` respeitando a estrutura de pacotes dentro da pasta `out`.
 
 ## Funcionalidades principais
@@ -84,7 +84,7 @@ Observações:
 - `FiltroRecomendacao` avalia objetos `Classificavel` e imprime mensagens de recomendação.
 
 Arquivos de destaque:
-- `src/Principal.java` — demonstra o uso das classes, criando filmes, série, avaliando, somando tempo e filtrando recomendações.
+- `src/br.com.alura.screenmatch.principal.Principal.java` — demonstra o uso das classes, criando filmes, série, avaliando, somando tempo e filtrando recomendações.
 - `src/br/com/alura/screenmatch/modelos/Titulo.java` — base para herança (encapsula atributos e comportamentos comuns), com `avalia()` e `mediaAvaliacao()`.
 - `src/br/com/alura/screenmatch/calculos/Classificavel.java` — interface que define o contrato `getClassificacao()`.
 
@@ -105,7 +105,7 @@ Muito bem avaliado no momento
 Muito bem avaliado no momento
 ```
 
-Obs.: Os valores e mensagens podem variar conforme as entradas no `Principal`.
+Obs.: Os valores e mensagens podem variar conforme as entradas no `br.com.alura.screenmatch.principal.Principal`.
 
 ## Autor
 
