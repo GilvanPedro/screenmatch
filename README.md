@@ -1,115 +1,171 @@
-# ScreenMatch (Java POO)
+# 🎬 ScreenMatch (Java POO & Integração com API)
 
-Projeto de estudos em Programação Orientada a Objetos (POO) em Java, inspirado no curso da Alura. O objetivo é modelar títulos audiovisuais (filmes, séries e episódios), praticar encapsulamento, herança, polimorfismo, interfaces e composição, além de aplicar cálculos simples como tempo total de maratona e um filtro de recomendação.
+## 🌟 Status do Projeto
 
-## Sumário
+[![Linguagem Principal](https://img.shields.io/badge/Java-17%2B-red.svg?style=for-the-badge&logo=java)](https://www.java.com/pt-br/)
+[![Build Tool](https://img.shields.io/badge/Compila%C3%A7%C3%A3o-Manual%20(javac)-blue.svg?style=for-the-badge)](https://docs.oracle.com/javase/tutorial/getStarted/cup.html)
+[![Integração](https://img.shields.io/badge/API-OMDB-yellow.svg?style=for-the-badge&logo=omdb)](https://www.omdbapi.com/)
+[![JSON Parser](https://img.shields.io/badge/Library-Gson-green.svg?style=for-the-badge&logo=google)](https://github.com/google/gson)
+[![Licença](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
 
-- [Tecnologias](#tecnologias)
-- [Estrutura do projeto](#estrutura-do-projeto)
-- [Como executar](#como-executar)
-  - [Executar via IntelliJ IDEA](#executar-via-intellij-idea)
-  - [Executar via terminal](#executar-via-terminal)
-- [Funcionalidades principais](#funcionalidades-principais)
-- [Saída de exemplo](#saída-de-exemplo)
-- [Autor](#autor)
+## 🎯 Visão Geral do Projeto
 
-## Tecnologias
+O **ScreenMatch** é um projeto de estudo avançado em **Programação Orientada a Objetos (POO)** em Java, desenvolvido a partir do curso da Alura. O objetivo principal é modelar e gerenciar títulos audiovisuais (Filmes, Séries e Episódios), aplicando conceitos fundamentais de POO como **Herança**, **Polimorfismo**, **Interfaces** e **Composição**.
 
-- Java (JDK 17+ recomendado)
-- IntelliJ IDEA (opcional) — o projeto contém `screenmatch.iml`
+A versão mais avançada do projeto demonstra a integração com a **API OMDB** para buscar dados de títulos em tempo real e utiliza a biblioteca **Gson** para o tratamento de dados JSON, além de incluir funcionalidades de persistência de dados em arquivo.
 
-> Observação: O projeto não utiliza Maven/Gradle neste momento; a compilação pode ser feita diretamente com `javac`.
+## 🏛 Arquitetura e Design de Software
 
-## Estrutura do projeto
+O projeto é estruturado em pacotes que refletem a separação de responsabilidades e a organização lógica do código, focando em um design limpo e modular.
 
+### Estrutura de Pacotes
+
+A arquitetura do projeto é dividida em quatro pacotes principais, além do pacote de exceções:
+
+| Pacote | Responsabilidade | Classes Chave | Conceitos de POO |
+| :--- | :--- | :--- | :--- |
+| `modelos` | **Modelos de Domínio** | `Titulo`, `Filme`, `Serie`, `Episodio`, `TituloOmdb` | Herança, Encapsulamento |
+| `calculos` | **Regras de Negócio** | `CalculadoraDeTempo`, `FiltroRecomendacao`, `Classificavel` | Polimorfismo, Interfaces |
+| `principal` | **Ponto de Entrada/Execução** | `Principal`, `PrincipalComBuscas`, `PrincipalComListas` | Inicialização, Fluxo de Aplicação |
+| `excecao` | **Tratamento de Erros** | `ErroDeConversaoDeAnoException` | Tratamento de Exceções |
+
+### Diagrama de Classes (Representação Textual)
+
+```mermaid
+classDiagram
+    Titulo <|-- Filme
+    Titulo <|-- Serie
+    Serie "1" *-- "*" Episodio
+    Classificavel <|.. Filme
+    Classificavel <|.. Episodio
+    
+    class Titulo {
+        +String nome
+        +int anoDeLancamento
+        +int duracaoMinutos
+        +void avalia(double nota)
+        +double mediaAvaliacao()
+    }
+    
+    class Filme {
+        +String diretor
+        +int getClassificacao()
+    }
+    
+    class Serie {
+        +int temporadas
+        +int episodiosPorTemporada
+        +int minutosPorEpisodio
+        +int getDuracaoMinutos()
+    }
+    
+    class Episodio {
+        +int numero
+        +int totalVisualizacoes
+        +int getClassificacao()
+    }
+    
+    interface Classificavel {
+        +int getClassificacao()
+    }
+    
+    class CalculadoraDeTempo {
+        +void inclui(Titulo t)
+    }
+    
+    class FiltroRecomendacao {
+        +void filtra(Classificavel c)
+    }
 ```
-screenmatch/
-├─ src/
-│  ├─ br.com.alura.screenmatch.principal.Principal.java
-│  └─ br/com/alura/screenmatch/
-│     ├─ calculos/
-│     │  ├─ CalculadoraDeTempo.java
-│     │  ├─ Classificavel.java
-│     │  └─ FiltroRecomendacao.java
-│     └─ modelos/
-│        ├─ Episodio.java
-│        ├─ Filme.java
-│        ├─ Serie.java
-│        └─ Titulo.java
-├─ out/               (gerado após compilação)
-├─ .gitignore
-├─ screenmatch.iml
-└─ README.md
+
+## ✨ Funcionalidades Principais
+
+O projeto demonstra as seguintes capacidades:
+
+1.  **Modelagem de POO:** Implementação de herança (`Filme` e `Serie` herdam de `Titulo`), polimorfismo (diferentes implementações de `getDuracaoMinutos` e `getClassificacao`) e interfaces (`Classificavel`).
+2.  **Cálculos de Maratona:** A `CalculadoraDeTempo` soma a duração de filmes e séries, considerando a estrutura de temporadas e episódios.
+3.  **Sistema de Recomendação:** O `FiltroRecomendacao` utiliza a interface `Classificavel` para fornecer recomendações baseadas na classificação dos títulos.
+4.  **Integração com API Externa:** A classe `PrincipalComBuscas` realiza requisições HTTP para a **API OMDB** para buscar dados de filmes e séries.
+5.  **Tratamento de JSON:** Utilização da biblioteca **Gson** para desserializar as respostas JSON da API em objetos Java (`TituloOmdb` e `Titulo`).
+6.  **Persistência:** O resultado das buscas é salvo em um arquivo JSON (`filmes.json`).
+
+## 🛠 Dependências
+
+O projeto utiliza a biblioteca **Gson** para manipulação de JSON.
+
+```xml
+<!-- Não é um projeto Maven, mas a dependência é: -->
+<dependency>
+    <groupId>com.google.code.gson</groupId>
+    <artifactId>gson</artifactId>
+    <version>2.10.1</version>
+</dependency>
 ```
 
-- `br.com.alura.screenmatch.principal.Principal.java` é o ponto de entrada da aplicação (`public static void main`).
-- Pacote `br.com.alura.screenmatch.modelos` contém os modelos de domínio: `Titulo`, `Filme`, `Serie` e `Episodio`.
-- Pacote `br.com.alura.screenmatch.calculos` contém utilitários e contratos: `CalculadoraDeTempo`, `FiltroRecomendacao` e a interface `Classificavel`.
+## ⚙ Pré-requisitos
 
-## Como executar
+*   **Java Development Kit (JDK)**: Versão 17 ou superior.
+*   **Biblioteca Gson**: O JAR da biblioteca deve ser incluído no *classpath* para a execução da classe `PrincipalComBuscas`.
+*   **Chave de API OMDB**: Necessária para a `PrincipalComBuscas`.
 
-### Executar via IntelliJ IDEA
+## 🚀 Instalação e Execução
 
-1. Abra o diretório do projeto no IntelliJ (`File > Open...`).
-2. Garanta que o SDK do projeto esteja configurado para JDK 17 ou superior (Project Structure > Project SDK).
-3. Abra o arquivo `src/br.com.alura.screenmatch.principal.Principal.java` e clique no ícone de "play" ao lado do método `main` para executar.
+O projeto é compilado e executado manualmente via `javac` e `java`, sem o uso de *build tools* como Maven ou Gradle.
 
-### Executar via terminal
+### 1. Compilação
 
-No Windows (PowerShell), a partir da raiz do projeto (`screenmatch/`):
+A partir do diretório raiz do projeto (`screenmatch/`):
 
-```powershell
-# 1) Criar pasta de saída (se necessário)
-mkdir -Force out
+```bash
+# 1. Crie o diretório de saída
+mkdir -p out
 
-# 2) Compilar todos os .java para a pasta out
-javac -d out src\**\*.java
+# 2. Compile todos os arquivos .java
+# Nota: Certifique-se de que o JAR do Gson esteja no classpath se for executar PrincipalComBuscas
+javac -d out screenmatch/src/br/com/alura/screenmatch/**/*.java screenmatch/src/br/com/alura/screenmatch/principal/*.java
+```
 
-# 3) Executar a classe principal (no pacote padrão)
+### 2. Execução (Exemplo Básico)
+
+Para executar a versão básica do projeto (sem API):
+
+```bash
 java -cp out br.com.alura.screenmatch.principal.Principal
 ```
 
-Observações:
-- O projeto utiliza a classe `br.com.alura.screenmatch.principal.Principal` no pacote padrão (sem declaração `package`), que importa classes dos pacotes `br.com.alura.screenmatch.*`.
-- O parâmetro `-d out` instrui o `javac` a gerar os `.class` respeitando a estrutura de pacotes dentro da pasta `out`.
+### 3. Execução (Com Busca na API e JSON)
 
-## Funcionalidades principais
+Para executar a versão com busca na API (requer Gson no *classpath* e a chave da API OMDB):
 
-- Criação e manipulação de títulos (`Titulo`) com atributos como nome, ano de lançamento, duração e avaliações.
-- Especializações de título:
-  - `Filme` (implementa `Classificavel` e fornece `getClassificacao()` com base na média de avaliações).
-  - `Serie` (sobrescreve `getDuracaoMinutos()` para calcular a duração total de maratona com temporadas, episódios e minutos por episódio).
-- `Episodio` também implementa `Classificavel`, classificando de acordo com o número de visualizações.
-- `CalculadoraDeTempo` soma a duração total para maratonar filmes e séries selecionados.
-- `FiltroRecomendacao` avalia objetos `Classificavel` e imprime mensagens de recomendação.
+1.  **Obtenha o JAR do Gson** (versão 2.10.1 ou superior) e salve-o em um local acessível (ex: `lib/gson-2.10.1.jar`).
+2.  **Insira sua chave da API OMDB** na variável `API_KEY` dentro de `PrincipalComBuscas.java`.
+3.  **Execute** a classe principal, incluindo o JAR do Gson no *classpath*:
 
-Arquivos de destaque:
-- `src/br.com.alura.screenmatch.principal.Principal.java` — demonstra o uso das classes, criando filmes, série, avaliando, somando tempo e filtrando recomendações.
-- `src/br/com/alura/screenmatch/modelos/Titulo.java` — base para herança (encapsula atributos e comportamentos comuns), com `avalia()` e `mediaAvaliacao()`.
-- `src/br/com/alura/screenmatch/calculos/Classificavel.java` — interface que define o contrato `getClassificacao()`.
+```bash
+java -cp out:lib/gson-2.10.1.jar br.com.alura.screenmatch.principal.PrincipalComBuscas
+```
+*(A sintaxe do classpath pode variar dependendo do sistema operacional.)*
 
-## Saída de exemplo
+## 🕹 Exemplo de Interação (PrincipalComBuscas)
 
-A execução típica imprime informações semelhantes a:
+A execução da `PrincipalComBuscas` solicita o nome do filme ou série para buscar na API OMDB:
 
 ```
-Duração do Filme: 180
-Nome: O Poderoso Chefão
-Ano de Lancamento: 1970
-Total de Avaliações: 3
-Nome: Lost
-Ano de Lancamento: 2000
-Duração para maratonar Lost: 5000
-Tempo de minutos para maratonar os escolhidos: 5380
-Muito bem avaliado no momento
-Muito bem avaliado no momento
+Digite o nome do filme ou série para buscar: The Matrix
+Título: The Matrix
+Ano: 1999
+Duração: 136 min
+Avaliação: 8.7
+...
+Digite o nome do filme ou série para buscar: sair
 ```
 
-Obs.: Os valores e mensagens podem variar conforme as entradas no `br.com.alura.screenmatch.principal.Principal`.
+O resultado da busca é salvo no arquivo `filmes.json`.
 
-## Autor
+## 📄 Licença
 
-- Nome: Gilvan
-- GitHub: [@GilvanPedro](https://github.com/GilvanPedro)
+Este projeto está sob a **Licença MIT**.
 
-Se quiser, abra uma issue ou um pull request com sugestões de melhoria!
+## 🧑‍💻 Autor
+
+Este projeto foi desenvolvido por [Gilvan Pedro](https://github.com/GilvanPedro).
